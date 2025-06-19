@@ -8,11 +8,18 @@
     <div class="container">
       <div class="inner-content">
         <div class="row">
-          <div class="col-lg-3 col-md-4 col-12 mb-2">
-            <div class="footer-logo text-center">
-              <h5>Ambara online</h5>
+            <div class="col-lg-2 col-6">
+              <a href="{% url 'index' %}" class="text-decoration-none d-flex align-items-center logo-wrapper">
+                <div
+                  class="logo-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+                  <span class="fw-bold">A</span>
+                </div>
+                <div class="logo-text">
+                  <span class="text-primary fw-bold fs-4">Ambara</span>
+                  <span class="text-white fs-6 align-text-top">online</span>
+                </div>
+              </a>
             </div>
-          </div>
           <div class="col-lg-9 col-md-8 col-12">
             <div class="footer-newsletter">
               <h4 class="title mb-4">
@@ -21,15 +28,8 @@
               </h4>
               <div class="newsletter-form-head">
                 <form class="newsletter-form">
-                  <input
-                    class="mb-2"
-                    name="email"
-                    placeholder="Email address here..."
-                    type="email"
-                    required=""
-                    value=""
-                    autocomplete="email"
-                  />
+                  <input class="mb-2" name="email" placeholder="Email address here..." type="email" required="" value=""
+                    autocomplete="email" />
                   <div class="button mb-4">
                     <button class="btn">
                       Subscribe<span class="dir-part"></span>
@@ -71,10 +71,7 @@
           <div class="col-lg-4 col-12">
             <div class="payment-gateway">
               <span>We Accept:</span>
-              <img
-                src="{% static 'images/credit-cards-footer.png' %}"
-                alt="#"
-              />
+              <img src="{% static 'images/credit-cards-footer.png' %}" alt="#" />
             </div>
           </div>
           <div class="col-lg-4 col-12">
@@ -82,7 +79,7 @@
               <p>
                 Designed and Developed by ❤️
                 <a href="#" rel="nofollow" target="_blank">
-                Groupe 2
+                  Groupe 2
                 </a>
               </p>
             </div>
@@ -91,34 +88,22 @@
             <ul class="socila">
               <li><span>Follow Me On:</span></li>
               <li>
-                <a
-                  href="#"
-                  rel="nofollow"
-                 >
+                <a href="#" rel="nofollow">
                   <i class="lni lni-linkedin"></i>
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  rel="nofollow"
-                 >
+                <a href="#" rel="nofollow">
                   <i class="lni lni-github"></i>
-              </a>
+                </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  rel="nofollow"
-                 >
+                <a href="#" rel="nofollow">
                   <i class="lni lni-instagram"></i>
                 </a>
               </li>
               <li>
-                <a
-                  href="#"
-                  rel="nofollow"
-                 >
+                <a href="#" rel="nofollow">
                   <i class="lni lni-facebook-filled"></i>
                 </a>
               </li>
@@ -129,5 +114,33 @@
     </div>
   </div>
 </footer>
+<style>
+  .logo-wrapper {
+    transition: transform 0.3s ease;
+  }
+
+  .logo-wrapper:hover {
+    transform: translateY(-2px);
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+
+  .logo-text {
+    line-height: 1.2;
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  .logo-text span:last-child {
+    font-size: 0.7em;
+    margin-top: -3px;
+    letter-spacing: 0.5px;
+  }
+</style>
 
 {% endblock %}

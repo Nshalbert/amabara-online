@@ -82,7 +82,7 @@ def register_page(request):
         profile.save()
 
         # send_account_activation_email(email, profile.email_token)
-        # messages.success(request, "An email has been sent to your mail.")
+        messages.success(request, "Registration success")
         return HttpResponseRedirect(request.path_info)
 
     return render(request, 'accounts/register.html')
