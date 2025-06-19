@@ -1,157 +1,309 @@
 {% load static %}
 
-<style>
-  @media (max-width: 992px) {
-    .widgets-wrap {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-      text-align: left;
-      flex-wrap: nowrap;
-    }
-
-    .widget-header {
-      margin-right: 10px;
-    }
-
-    .icontext {
-      display: flex;
-      align-items: center;
-    }
-
-    .icontext .text {
-      text-align: left;
-      white-space: nowrap;
-    }
-
-    .text span {
-      display: block;
-    }
-
-    .text div {
-      display: inline;
-    }
-}
-</style>
-
-<header class="section-header">
-    <section class="header-main border-bottom">
+<header class="sticky-top bg-white shadow-sm">
+  <!-- Top Header -->
+  <section class="border-bottom py-2 py-md-3">
     <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-2 col-4">
-          <div class="brand-wrap">
-           <h4 style="color: #3167EB;">Ambara online</h4>
-          </div>
+      <div class="row align-items-center gx-3">
+        <!-- Logo - Version premium avec "online" en noir -->
+        <div class="col-lg-2 col-6">
+          <a href="{% url 'index' %}" class="text-decoration-none d-flex align-items-center logo-wrapper">
+            <div class="logo-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2">
+              <span class="fw-bold">A</span>
+            </div>
+            <div class="logo-text">
+              <span class="text-primary fw-bold fs-4">Ambara</span>
+              <span class="text-dark fs-6 align-text-top">online</span>
+            </div>
+          </a>
         </div>
-        <div class="col-lg-6 col-sm-12">
-          <form method="GET" action="{% url 'product_search' %}" class="search">
-            <div class="input-group w-100">
-              <input type="text" class="form-control" name="q"
-              placeholder="Search" value="{{ query|default:"" }}"/>
-              <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
-                  <i class="fa fa-search"></i>
-                </button>
-              </div>
+        
+        <!-- Search Bar - Version luxe -->
+        <div class="col-lg-6 col-12 order-lg-0 order-2 mt-2 mt-lg-0">
+          <form method="GET" action="{% url 'product_search' %}" class="d-flex">
+            <div class="input-group search-wrapper shadow-sm">
+              <span class="input-group-text bg-white border-end-0 ps-4">
+                <i class="fas fa-search text-muted"></i>
+              </span>
+              <input type="text" 
+                     class="form-control border-start-0 py-2 px-2" 
+                     name="q" 
+                     placeholder="Rechercher des produits..." 
+                     value="{{ query|default:'' }}"
+                     aria-label="Search products">
+              <button class="btn btn-primary px-4 fw-medium" type="submit">
+                Search
+              </button>
             </div>
           </form>
         </div>
-
-        <div class="col-lg-4 col-sm-6 col-8">
-          <div class="widgets-wrap float-md-right">
-
-            <!-- Cart Icon with badge -->
-            <div class="widget-header mr-3">
-              <a href="{% url 'cart' %}" class="icon icon-sm rounded-circle border">
-                <i class="fa fa-shopping-cart"></i>
+        
+        <!-- Cart & User Widgets - Version ultime -->
+        <div class="col-lg-4 col-6 order-lg-1 order-0">
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <!-- Cart Icon - Animation premium -->
+            <div class="position-relative">
+              <a href="{% url 'cart' %}" 
+                 class="cart-icon d-flex align-items-center justify-content-center rounded-circle position-relative"
+                 data-bs-toggle="tooltip"
+                 data-bs-placement="bottom"
+                 title="Votre panier">
+                <i class="fas fa-shopping-cart"></i>
+                {% if user.is_authenticated and request.user.profile.get_cart_count > 0 %}
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger pulse">
+                    {{request.user.profile.get_cart_count}}
+                    <span class="visually-hidden">articles dans le panier</span>
+                  </span>
+                {% endif %}
               </a>
-              {% if user.is_authenticated %}
-                <span class="badge badge-pill badge-danger notify">
-                  {{request.user.profile.get_cart_count}}
-                </span>
-              {% else %}
-                <span class="badge badge-pill badge-danger notify"></span>
-              {% endif %}
             </div>
-
-            <!-- Profile Icon -->
-            <div class="widget-header icontext">
-              {% if user.is_authenticated %}
-                {% if user.profile.profile_image %}
-                  <a href="{% url 'profile' username=user.username %}" 
-                  class="icon icon-sm rounded-circle border">
-                    <img
-                      src="{{ user.profile.profile_image.url }}"
-                      alt="Profile Image"
-                      class="rounded-circle"
-                      width="42"
-                      height="42"
-                    />
-                  </a>
+            
+            <!-- User Profile - Cercle parfait avec dropdown amélioré -->
+            <div class="dropdown ms-2">
+              <a href="#" 
+                 class="user-avatar d-flex align-items-center justify-content-center rounded-circle dropdown-toggle"
+                 id="userDropdown"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false">
+                {% if user.is_authenticated and user.profile.profile_image %}
+                  <img src="{{ user.profile.profile_image.url }}" 
+                       class="rounded-circle object-fit-cover w-100 h-100" 
+                       alt="Profile">
                 {% else %}
-                  <a
-                    href="{% url 'profile' username=user.username %}"
-                    class="icon icon-sm rounded-circle border">
-                    <i class="fa fa-user"></i>
-                  </a>
+                  <i class="fas fa-user"></i>
                 {% endif %}
-              {% else %}
-                <a href="{% url 'login' %}" class="icon icon-sm rounded-circle border">
-                  <i class="fa fa-user"></i>
-                </a>
-              {% endif %}
-
-              <!-- Welcome Text and Logout Link -->
-              <div class="text">
+              </a>
+              
+              <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="userDropdown">
                 {% if request.user.is_authenticated %}
-                <span class="text-muted">Welcome, {{ request.user }}!</span>
-                <div>
-                  <a href="{% url 'logout' %}">Logout</a>
-                </div>
+                  <li class="px-3 py-2 user-dropdown-header">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0">
+                        {% if user.profile.profile_image %}
+                          <img src="{{ user.profile.profile_image.url }}" 
+                               class="rounded-circle border border-2 border-primary object-fit-cover"
+                               width="48"
+                               height="48"
+                               alt="Profile">
+                        {% else %}
+                          <div class="d-flex align-items-center justify-content-center bg-primary text-white rounded-circle user-avatar-lg">
+                            <i class="fas fa-user"></i>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <h6 class="mb-0">{{ request.user }}</h6>
+                        <small class="text-muted">Compte vérifié</small>
+                      </div>
+                    </div>
+                  </li>
+                  <li><hr class="dropdown-divider mx-3"></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'profile' username=user.username %}">
+                      <i class="fas fa-user-circle me-2 text-primary"></i> Mon profil
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'logout' %}">
+                      <i class="fas fa-sign-out-alt me-2 text-danger"></i> Déconnexion
+                    </a>
+                  </li>
                 {% else %}
-                <span class="text-muted">Welcome</span>
-                <div>
-                  <a href="{% url 'login' %}">Sign in</a> |
-                  <a href="{% url 'register' %}">Register</a>
-                </div>
+                  <li class="px-3 py-2 user-dropdown-header">
+                    <h6 class="mb-0">Bienvenue</h6>
+                    <small class="text-muted">Connectez-vous à votre compte</small>
+                  </li>
+                  <li><hr class="dropdown-divider mx-3"></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'login' %}">
+                      <i class="fas fa-sign-in-alt me-2 text-primary"></i> Connexion
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'register' %}">
+                      <i class="fas fa-user-plus me-2 text-success"></i> Créer un compte
+                    </a>
+                  </li>
                 {% endif %}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <nav class="navbar navbar-dark navbar-expand-md bg-dark">
+  
+  <!-- Navigation - Version luxe -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1">
     <div class="container">
-      <button
-        class="navbar-toggler ml-auto"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarCollapse"
-        aria-controls="navbarCollapse"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
+      <button class="navbar-toggler ms-auto" 
+              type="button" 
+              data-bs-toggle="collapse" 
+              data-bs-target="#mainNav"
+              aria-controls="mainNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
       </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto" style="gap: 20px;">
-          <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Home</a></li>
-          {% if user.is_authenticated %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'wishlist' %}">Wishlist ({{ request.user.wishlist.count }})</a></li>
-          {% else %}
-            <li class="nav-item"><a class="nav-link" href="{% url 'wishlist' %}">Wishlist</a></li>
-          {% endif %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'order_history' %}">Your Orders</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'product_reviews' %}">Your Reviews</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
+      
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'index' %}">
+              <i class="fas fa-home me-2"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'wishlist' %}">
+              <i class="fas fa-heart me-2"></i> 
+              Wishlist 
+              {% if user.is_authenticated %}
+                <span class="badge bg-white text-primary ms-2">{{ request.user.wishlist.count }}</span>
+              {% endif %}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'order_history' %}">
+              <i class="fas fa-box-open me-2"></i> Your Orders
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'product_reviews' %}">
+              <i class="fas fa-star me-2"></i> Your Reviews
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'contact' %}">
+              <i class="fas fa-envelope me-2"></i> Contact Us
+            </a>
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link px-3 py-2 mx-1 rounded-3 text-white fw-medium d-flex align-items-center" 
+               href="{% url 'about' %}">
+              <i class="fas fa-info-circle me-2"></i> About Us
+            </a>
+          </li> -->
         </ul>
       </div>
     </div>
   </nav>
-
-
 </header>
+
+<style>
+  /* Logo premium */
+  .logo-wrapper {
+    transition: transform 0.3s ease;
+  }
+  .logo-wrapper:hover {
+    transform: translateY(-2px);
+  }
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    transition: all 0.3s ease;
+  }
+  .logo-text {
+    line-height: 1.2;
+    display: inline-flex;
+    flex-direction: column;
+  }
+  .logo-text span:last-child {
+    font-size: 0.7em;
+    margin-top: -3px;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Barre de recherche premium */
+  .search-wrapper {
+    border-radius: 50px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #dee2e6;
+  }
+  .search-wrapper:focus-within {
+    border-color: #3167EB;
+    box-shadow: 0 0 0 0.25rem rgba(49, 103, 235, 0.25);
+  }
+  .search-wrapper .btn {
+    border-radius: 0 50px 50px 0;
+  }
+  
+  /* Icônes circulaires */
+  .cart-icon, .user-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: #f8f9fa;
+    color: #3167EB;
+    border: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+  }
+  .cart-icon:hover, .user-avatar:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+  }
+  .user-avatar-lg {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+  
+  /* Animation badge panier */
+  .pulse {
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.1); }
+    100% { transform: translate(-50%, -50%) scale(1); }
+  }
+  
+  /* Dropdown premium */
+  .dropdown-menu {
+    border: none;
+    min-width: 280px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .user-dropdown-header {
+    background-color: #f8f9fa;
+  }
+  
+  /* Navigation */
+  .nav-link {
+    transition: all 0.3s ease;
+  }
+  .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+  }
+</style>
+
+<script>
+  // Activation des tooltips et animations
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+    
+    // Animation logo
+    const logo = document.querySelector('.logo-wrapper');
+    if (logo) {
+      logo.style.opacity = '0';
+      logo.style.transform = 'translateY(-10px)';
+      logo.style.transition = 'all 0.5s ease';
+      
+      setTimeout(() => {
+        logo.style.opacity = '1';
+        logo.style.transform = 'translateY(0)';
+      }, 100);
+    }
+  });
+</script>

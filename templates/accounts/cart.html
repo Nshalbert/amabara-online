@@ -146,18 +146,18 @@
             <dl class="dlist-align">
               <dt>Total price:</dt>
               <dd class="text-right">
-                <strong>Fbu{{ cart.get_cart_total }}</strong>
+                <strong>{{ cart.get_cart_total }}  Fbu</strong>
               </dd>
             </dl>
             {% if cart.coupon %}
             <dl class="dlist-align">
               <dt>Discount:</dt>
-              <dd class="text-right">Fbu{{ cart.coupon.discount_amount }}</dd>
+              <dd class="text-right">{{ cart.coupon.discount_amount }} Fbu</dd>
             </dl>
             <dl class="dlist-align">
               <dt>Total:</dt>
               <dd class="text-right h5">
-                <strong>Fbu{{ cart.get_cart_total_price_after_coupon }}</strong>
+                <strong>{{ cart.get_cart_total_price_after_coupon }} Fbu</strong>
               </dd>
             </dl>
             {% endif %}
@@ -183,7 +183,7 @@
     key: "rzp_test_5XxorWz3z1N2m5",
     amount: "{{ cart.get_cart_total_price_after_coupon|floatformat:0 }}",
     currency: "INR",
-    name: "Django Ecommerce Site",
+    name: "Ambara online burundian shop",
     description: "Purchased",
     order_id: "{{ payment.id }}",
 
@@ -192,9 +192,9 @@
       window.location.href = `http://127.0.0.1:8000/accounts/success/?order_id={{ payment.id }}`;
     },
     prefill: {
-      name: "Gaurav Kumar",
-      email: "gaurav.kumar@example.com",
-      contact: "9000090000",
+      name: "Amabara online",
+      email: "ambara-online@gmail.com",
+      contact: "69254 254",
     },
     notes: {
       address: "Razorpay Corporate Office",
